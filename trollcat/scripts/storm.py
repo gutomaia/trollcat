@@ -5,21 +5,28 @@ from time import sleep
 logger = logging.getLogger('trollcat')
 
 TWEET_DELAY = 4
-LIMIT = 140
+TWEET_LIMIT = 140
 
 def tweet_split(text):
-    # TODO: split words
+    # TODO: need a better math formula
+    paging = len(text) / (TWEET_LIMIT - 2)
 
-    # for i, word in enumerate(words):
-    #     if ' '.join(words)
-    #     tweet
+    words = text.split()
+    start = 0
+    tweets = []
+    page = 1
+    for i, word in enumerate(words):
+        if len(' '.join(words[start:i])) > TWEET_LIMIT:
+            tweet = '%s/%s' % (page, ' '.join(words[start:i-1]))
+            page += 1
+            tweets.append(tweet)
+            start = i - 1
 
-    return [
-        '[1/4] @gutomaia Trollcat head is ok',
-        '[2/4] @gutomaia Trollcat wowa is ok',
-        '[3/4] @gutomaia Trollcat wowa is ok',
-        '[4/4] @gutomaia Trollcat tail 2 4',
-    ]
+    tweet = '%s/%s' % (page, ' '.join(words[start:]))
+    tweets.append(tweet)
+
+    return tweets
+
 
 def get_api(tag, **settings):
 
